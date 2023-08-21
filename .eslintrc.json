@@ -5,8 +5,9 @@
         "node": true
     },
     "extends": [
-        "eslint:recommended",
-        "plugin:react/recommended"
+        "standard-with-typescript",
+        "plugin:react/recommended",
+        "eslint-config-prettier"
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -22,5 +23,10 @@
       "@typescript-eslint/no-floating-promises": "off",
       "@typescript-eslint/explicit-function-return-type": "off",
       "@typescript-eslint/no-misused-promises": "off"
+    },
+    "settings": {
+    "react": {
+      "version": "detect"
     }
+  }
 }
