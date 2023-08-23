@@ -18,5 +18,7 @@ COPY . .
 # usar usuario que crea la imagen de node con uid 1000 y gid 1000
 USER node
 
+EXPOSE 3000
+
 # Se ejecutará cuando inicies un contenedor
 CMD [ "npm", "run", "dev" ]
