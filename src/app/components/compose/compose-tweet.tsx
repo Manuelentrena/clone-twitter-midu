@@ -1,7 +1,7 @@
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { ComposeTextArea } from ".";
+import { ComposeTextArea, ComposeTextButton } from ".";
 
 export default function ComposeTweet({
   userAvatarUrl,
@@ -11,7 +11,7 @@ export default function ComposeTweet({
   const addPost = async (formData: FormData) => {
     "use server";
     const content = formData.get("content");
-    if (content === null) return;
+    if (content === null || content === "") return;
     const supabase = createServerActionClient({ cookies });
     const {
       data: { user },
@@ -40,9 +40,7 @@ export default function ComposeTweet({
 
       <div className="flex flex-1 flex-col gap-y-4">
         <ComposeTextArea />
-        <button className="bg-sky-500 text-sm font-bold rounded-full px-5 py-2 self-end">
-          Postear
-        </button>
+        <ComposeTextButton />
       </div>
     </form>
   );
