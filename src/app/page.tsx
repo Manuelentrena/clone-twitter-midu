@@ -1,11 +1,13 @@
-import { Posts } from "@/app/components/List";
+import { PostList } from "@/app/components/List";
 import { AuthButtonServer } from "@/app/components/buttons";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { ComposeTweet } from "./components/compose";
+import { type Database } from "./types";
 
 export default async function Home() {
-  const supabase = createServerComponentClient({ cookies });
+  const supabase = createServerComponentClient<Database>({ cookies });
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -19,10 +21,11 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">
-      <section className="max-w-[600px] mx-auto border-l border-r border-white/10 min-h-screen">
-        <AuthButtonServer />
-        <Posts posts={posts} />
+      <section className="max-w-[600px] w-full mx-auto border-l border-r border-white/10 min-h-screen">
+        <ComposeTweet userAvatarUrl={session.user?.user_metadata?.avatar_url} />
+        <PostList posts={posts} />
       </section>
+      <AuthButtonServer />
     </main>
   );
 }

@@ -1,7 +1,8 @@
 import { Tweet } from "@/app/components/cards";
+import { type Post } from "@/app/types";
 
-export default function Postlist({ posts }: any) {
-  return posts?.map((post: any) => {
+export default function Postlist({ posts }: { posts: Post[] }) {
+  return posts?.map((post: Post) => {
     const { id, content, users } = post;
     const {
       name: userName,
