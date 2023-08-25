@@ -1,36 +1,21 @@
-import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
-import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
-import { ComposeTextArea, ComposeTextButton } from ".";
+"use client";
 
+import { CreatePost } from "@/app/actions";
+import { useRef } from "react";
+import { ComposeTextButton } from ".";
 export default function ComposeTweet({
   userAvatarUrl,
 }: {
   userAvatarUrl: string;
 }) {
-  const addPost = async (formData: FormData) => {
-    "use server";
-    const content = formData.get("content");
-    if (content === null || content === "") return;
-    const supabase = createServerActionClient({ cookies });
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (user === null) return;
-    const { status } = await supabase
-      .from("posts")
-      .insert({ content, user_id: user.id });
-
-    if (status === 201) {
-      revalidatePath("/");
-    } else {
-      // throw new Error(statusText);
-    }
-  };
-
+  const formRef = useRef<HTMLFormElement>(null);
   return (
     <form
-      action={addPost}
+      ref={formRef}
+      action={async (formData) => {
+        await CreatePost(formData);
+        formRef.current?.reset();
+      }}
       className="flex flex-row p-3 border-white/20 border-b"
     >
       <img
@@ -39,7 +24,12 @@ export default function ComposeTweet({
       />
 
       <div className="flex flex-1 flex-col gap-y-4">
-        <ComposeTextArea />
+        <textarea
+          name="content"
+          rows={4}
+          className=" text-xl bg-black placeholder-gray-500 p-3 ml-2 border-white/20 border-b block"
+          placeholder="¡¿Que esta pasando?!"
+        ></textarea>
         <ComposeTextButton />
       </div>
     </form>
